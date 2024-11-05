@@ -29,9 +29,9 @@ public class Treap<K extends Comparable> {
     public Treap() {
 
         printer = new TreePrinter<>(Node::toString, Node::getLeft, Node::getRight);
-        printer.setSquareBranches(false);
-        printer.setTspace(1);
-        printer.setHspace(1);
+        printer.setSquareBranches(true);
+        printer.setTspace(3);
+        printer.setHspace(2);
         // printer.setPrintStream(System.out);
     }
 

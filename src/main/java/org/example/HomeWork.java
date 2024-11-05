@@ -3,10 +3,13 @@ package org.example;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.valueOf;
 
 public class HomeWork {
 
@@ -51,7 +54,7 @@ public class HomeWork {
                     actions.get(matcher.group(1))
                             .proceed(
                                     new BigDecimal(matcher.group(2)),
-                                    Integer.valueOf(Optional.ofNullable(matcher.group(3)).orElse("0")),
+                                    valueOf(Optional.ofNullable(matcher.group(3)).orElse("0")),
                                     treap
                             )
             );
@@ -66,7 +69,30 @@ public class HomeWork {
      * <a href="https://informatics.msk.ru/mod/statements/view.php?id=1974&chapterid=2782#1">https://informatics.msk.ru/mod/statements/view.php?id=1974&chapterid=2782#1</a><br/>
      */
     public List<Integer> getLeaveOrder(List<String> actionList) {
-        return null;
+        var treap = new Treap<Integer>();
+        var result = new ArrayList<Integer>();
+        var p = Pattern.compile("([+?]) (\\d+)");
+        var y = -2;
+
+        for (String s : actionList) {
+            var matcher = p.matcher(s);
+            matcher.find();
+            var action = matcher.group(1);
+            var arg = Integer.valueOf(matcher.group(2));
+            if ("?".equals(action)) {
+                var right = treap.split(arg - 1)[1];
+                y = null == right ? -1 : right.key;
+                result.add(y);
+            } else {
+                var add = -2 != y ? (y + arg) % 1_000_000_000 : arg;
+                if (null == treap.getByKey(add)) {
+                    treap.add(add);
+                }
+                y = -2;
+            }
+        }
+
+        return result;
     }
 
 
